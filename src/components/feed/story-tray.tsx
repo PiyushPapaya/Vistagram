@@ -99,7 +99,7 @@ export function StoryTray() {
         })}
       </div>
 
-      {activeStoryUserId && <StoryViewer userId={activeStoryUserId} />}
+      {activeStoryUserId && <StoryViewer key={activeStoryUserId} userId={activeStoryUserId} />}
     </>
   )
 }

@@ -15,5 +15,5 @@ export default function StoriesPage({ params }: { params: Promise<{ username: st
     return null
   }
 
-  return <StoryViewer userId={user.id} />
+  return <StoryViewer key={user.id} userId={user.id} />
 }

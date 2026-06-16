@@ -19,7 +19,7 @@ export function ExploreMedia({ post, className }: { post: Post; className?: stri
 
   if (isVideo) return <ExploreVideo post={post} className={cls} />
   if (post.images.length > 1) return <ExploreSlideshow images={post.images} className={cls} />
-  return <img src={post.images[0]} alt="" className={cls} loading="lazy" draggable={false} />
+  return <img src={post.images[0]} alt="" className={cls} loading="lazy" decoding="async" draggable={false} />
 }
 
 function ExploreVideo({ post, className }: { post: Post; className: string }) {
@@ -86,6 +86,7 @@ function ExploreSlideshow({ images, className }: { images: string[]; className: 
           src={src}
           alt=""
           loading="lazy"
+          decoding="async"
           draggable={false}
           className={cn(
             className,

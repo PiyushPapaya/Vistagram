@@ -22,5 +22,5 @@ export function GridMedia({ post, className }: { post: Post; className?: string 
     )
   }
 
-  return <img src={firstImage} alt="" className={cls} loading="lazy" />
+  return <img src={firstImage} alt="" className={cls} loading="lazy" decoding="async" />
 }

@@ -9,6 +9,7 @@ import { MEDIA, AUTOSCROLL } from '@/lib/media-config'
 import {
   IgHeart, IgComment, IgShare, IgBookmark, IgEmoji, IgEllipsis, IgVerified,
 } from '@/components/shared/ig-icons'
+import { FadeImage } from '@/components/shared/fade-image'
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, Play } from 'lucide-react'
 
 interface PostCardProps {
@@ -194,7 +195,18 @@ export function PostCard({ post, onOpenComments, onAutoAdvance, isAutoScrollTarg
           >
             {post.images.map((src, i) => (
               <div key={i} className="carousel-slide">
-                <FadeImage src={src} alt={`Post by ${author.username}`} eager={i === 0} />
+                {/* Render the first slide + the immediate neighbours of the active
+                    slide so the next image is already decoded before it slides in. */}
+                {Math.abs(i - carouselIdx) <= 1 || i === 0 ? (
+                  <FadeImage
+                    src={src}
+                    alt={`Post by ${author.username}`}
+                    eager={i === 0}
+                    priority={i === 0}
+                  />
+                ) : (
+                  <div className="absolute inset-0 media-shimmer" aria-hidden />
+                )}
               </div>
             ))}
           </div>
@@ -336,24 +348,6 @@ export function PostCard({ post, onOpenComments, onAutoAdvance, isAutoScrollTarg
   )
 }
 
-// ─── Fade-in image (centered, with a shimmer placeholder until painted) ───────
-function FadeImage({ src, alt, eager }: { src: string; alt: string; eager?: boolean }) {
-  const [loaded, setLoaded] = useState(false)
-  return (
-    <>
-      {!loaded && <div className="absolute inset-0 media-shimmer" aria-hidden />}
-      <img
-        src={src}
-        alt={alt}
-        onLoad={() => setLoaded(true)}
-        className={cn('absolute inset-0 h-full w-full object-cover object-center select-none media-fade', loaded && 'is-loaded')}
-        draggable={false}
-        loading={eager ? 'eager' : 'lazy'}
-      />
-    </>
-  )
-}
-
 // ─── Feed Video Player ────────────────────────────────────────────────────────
 function FeedVideo({
   src, poster, onVideoEnded, isAutoScrollTarget,
@@ -365,24 +359,34 @@ function FeedVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [muted, setMuted] = useState(true)
-  const [playing, setPlaying] = useState(false)
+  const [, setPlaying] = useState(false)
+  const [ready, setReady] = useState(false)   // first frame painted → fade in
   const [showPlayBtn, setShowPlayBtn] = useState(false)
   const showPlayTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // IntersectionObserver: autoplay when ≥50% visible, pause when gone
+  // One observer drives two things off the same scroll position:
+  //  • near viewport (800px margin) → upgrade preload so the clip is buffered
+  //    *before* it scrolls into view (no spinner when auto-scroll lands on it),
+  //  • ≥50% visible → autoplay; off-screen → pause.
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-          video.play().then(() => setPlaying(true)).catch(() => {})
-        } else {
-          video.pause()
-          setPlaying(false)
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && video.preload !== 'auto') {
+            video.preload = 'auto'
+            video.load()
+          }
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            video.play().then(() => setPlaying(true)).catch(() => {})
+          } else if (!entry.isIntersecting) {
+            video.pause()
+            setPlaying(false)
+          }
         }
       },
-      { threshold: 0.5 }
+      { threshold: [0, 0.5], rootMargin: '800px 0px' }
     )
     obs.observe(video)
     return () => obs.disconnect()
@@ -424,6 +428,9 @@ function FeedVideo({
 
   return (
     <div className="relative h-full w-full bg-black" onClick={handleTap}>
+      {/* Skeleton until the first frame is ready — generated reels ship without a
+          poster image, so without this the box would flash solid black. */}
+      {!ready && !poster && <div className="absolute inset-0 media-shimmer" aria-hidden />}
       <video
         ref={videoRef}
         src={src}
@@ -431,8 +438,13 @@ function FeedVideo({
         loop={false}
         muted={muted}
         playsInline
-        preload="metadata"
-        className="h-full w-full object-cover object-center"
+        preload="none"
+        onLoadedData={() => setReady(true)}
+        onCanPlay={() => setReady(true)}
+        className={cn(
+          'h-full w-full object-cover object-center media-fade',
+          (ready || poster) && 'is-loaded',
+        )}
       />
 
       {/* Play/pause flash overlay */}

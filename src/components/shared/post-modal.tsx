@@ -73,6 +73,7 @@ export function PostModal({ postId, onClose }: { postId: string; onClose: () => 
             <img
               src={post.images[imgIdx]}
               alt=""
+              decoding="async"
               className="max-h-full max-w-full object-contain select-none"
               draggable={false}
             />

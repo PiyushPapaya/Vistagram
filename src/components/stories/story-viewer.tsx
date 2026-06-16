@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { X, MoreHorizontal } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { getStoriesByUser, getStoryAuthors, getUserById, relativeTime } from '@/lib/mock-data'
-import { cn } from '@/lib/utils'
 import { IgHeart, IgEmoji } from '@/components/shared/ig-icons'
 
 const DURATION = 5000
@@ -21,6 +20,9 @@ export function StoryViewer({ userId }: StoryViewerProps) {
   const [reply, setReply] = useState('')
   const [inputFocused, setInputFocused] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  // Mirror of `progress` so the timer can resume from where a pause left off.
+  const progressRef = useRef(0)
+  const setBar = useCallback((pct: number) => { progressRef.current = pct; setProgress(pct) }, [])
 
   const storyAuthors = getStoryAuthors()
   const authorIdx = storyAuthors.indexOf(userId)
@@ -37,37 +39,47 @@ export function StoryViewer({ userId }: StoryViewerProps) {
 
   const goNext = useCallback(() => {
     if (storyIdx < stories.length - 1) {
-      setStoryIdx(i => i + 1); setProgress(0)
+      setStoryIdx(i => i + 1); setBar(0)
     } else if (nextUserId) {
       setActiveStoryUserId(nextUserId)
     } else {
       setActiveStoryUserId(null)
     }
-  }, [storyIdx, stories.length, nextUserId, setActiveStoryUserId])
+  }, [storyIdx, stories.length, nextUserId, setActiveStoryUserId, setBar])
 
   const goPrev = useCallback(() => {
     if (storyIdx > 0) {
-      setStoryIdx(i => i - 1); setProgress(0)
+      setStoryIdx(i => i - 1); setBar(0)
     } else if (prevUserId) {
       setActiveStoryUserId(prevUserId)
     }
-  }, [storyIdx, prevUserId, setActiveStoryUserId])
+  }, [storyIdx, prevUserId, setActiveStoryUserId, setBar])
 
   useEffect(() => {
     if (currentStory) markStoryViewed(currentStory.id)
   }, [currentStory?.id])
 
+  // Buffer the next frame ahead of time so tapping/auto-advancing is instant:
+  // the next story for this author, or the first story of the next author.
   useEffect(() => {
-    if (paused || inputFocused) {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-      return
-    }
+    const upcoming = stories[storyIdx + 1]?.media_url ?? nextStory?.media_url
+    if (upcoming) { const img = new Image(); img.src = upcoming }
+  }, [storyIdx, stories, nextStory?.media_url])
+
+  // Drive the progress bar from a wall-clock timer and advance straight from the
+  // timer callback (not from inside a setState updater — that would double-fire
+  // under StrictMode and skip a story). Resumes from wherever it was paused.
+  useEffect(() => {
+    if (paused || inputFocused) return
+    const startedAt = performance.now() - (progressRef.current / 100) * DURATION
     intervalRef.current = setInterval(() => {
-      setProgress(p => {
-        if (p >= 100) { goNext(); return 0 }
-        return p + (100 / (DURATION / 100))
-      })
-    }, 100)
+      const pct = Math.min(((performance.now() - startedAt) / DURATION) * 100, 100)
+      setBar(pct)
+      if (pct >= 100) {
+        if (intervalRef.current) clearInterval(intervalRef.current)
+        goNext()
+      }
+    }, 50)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [storyIdx, paused, inputFocused, goNext])
 
@@ -140,8 +152,10 @@ export function StoryViewer({ userId }: StoryViewerProps) {
       >
         {/* Story media */}
         <img
+          key={currentStory.media_url}
           src={currentStory.media_url}
           alt="Story"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
           draggable={false}
         />

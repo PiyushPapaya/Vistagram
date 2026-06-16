@@ -211,6 +211,7 @@ function ReelItem({
   const [saved, setSaved] = useState(false)
   const [likeCount, setLikeCount] = useState(reel.likes_count)
   const [likeAnimating, setLikeAnimating] = useState(false)
+  const [ready, setReady] = useState(false)   // first frame painted → fade in
   const author = getUserById(reel.author_id) ?? {
     id: reel.author_id,
     username: 'user',
@@ -221,12 +222,19 @@ function ReelItem({
   const { isFollowing, follow } = useStore()
   const following = isFollowing(reel.author_id)
 
+  // Only the active reel, the one above, and the next two carry a real <video>
+  // src. Everything else is an inert placeholder — so we never have ~30 videos
+  // fetching at once. The active + next clip preload fully ('auto') so swiping
+  // / auto-advancing to the next reel plays instantly with no spinner.
+  const inWindow = offset >= -1 && offset <= 2
+  const preload: 'auto' | 'metadata' = offset === 0 || offset === 1 ? 'auto' : 'metadata'
+
   useEffect(() => {
     const v = videoRef.current
     if (!v) return
     if (isActive) { v.currentTime = 0; v.play().catch(() => {}) }
     else v.pause()
-  }, [isActive])
+  }, [isActive, inWindow])
 
   useEffect(() => {
     if (videoRef.current) videoRef.current.muted = muted
@@ -262,14 +270,26 @@ function ReelItem({
           className="relative h-full bg-black overflow-hidden flex-shrink-0"
           style={{ width: `min(calc(100vh * ${MEDIA.REEL_ASPECT_RATIO}), 100vw)`, maxWidth: '100vw' }}
         >
+          {/* Skeleton until the first frame paints (reels ship without posters,
+              so this prevents a black flash while the clip buffers). */}
+          {!ready && <div className="absolute inset-0 media-shimmer" aria-hidden />}
           <video
             ref={videoRef}
-            src={reel.video_url}
+            src={inWindow ? reel.video_url : undefined}
             poster={reel.poster_url || undefined}
             loop={!autoAdvance}
             muted={muted}
             playsInline
-            className="absolute inset-0 h-full w-full object-cover"
+            preload={preload}
+            onLoadedData={() => setReady(true)}
+            onCanPlay={() => { setReady(true); if (isActive) videoRef.current?.play().catch(() => {}) }}
+            // When this slot leaves the window its src is dropped → the element
+            // empties; show the skeleton again until it reloads on return.
+            onEmptied={() => setReady(false)}
+            className={cn(
+              'absolute inset-0 h-full w-full object-cover media-fade',
+              ready && 'is-loaded',
+            )}
           />
 
           {/* Bottom gradient */}
