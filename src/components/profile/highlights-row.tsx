@@ -2,14 +2,17 @@
 
 import { Plus } from 'lucide-react'
 import { type User } from '@/lib/mock-data'
+import { MEDIA_IMAGES } from '@/lib/generated-media'
 import { useStore } from '@/lib/store'
 
-const MOCK_HIGHLIGHTS = [
-  { id: 'h1', title: 'Travel', cover: 'https://picsum.photos/seed/hl1/150/150' },
-  { id: 'h2', title: 'Food', cover: 'https://picsum.photos/seed/hl2/150/150' },
-  { id: 'h3', title: 'Street', cover: 'https://picsum.photos/seed/hl3/150/150' },
-  { id: 'h4', title: 'BTS', cover: 'https://picsum.photos/seed/hl4/150/150' },
-]
+// Covers are pulled from the real generated media (videos_phots) — spread across
+// the pool so each highlight shows a different local frame.
+const HIGHLIGHT_TITLES = ['Travel', 'Food', 'Street', 'BTS']
+const MOCK_HIGHLIGHTS = HIGHLIGHT_TITLES.map((title, i) => ({
+  id: `h${i + 1}`,
+  title,
+  cover: MEDIA_IMAGES[(i * 7 + 2) % MEDIA_IMAGES.length] ?? '',
+}))
 
 export function HighlightsRow({ user }: { user: User }) {
   const { currentUserId } = useStore()

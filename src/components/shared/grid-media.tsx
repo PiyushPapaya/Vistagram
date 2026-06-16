@@ -1,4 +1,5 @@
 import type { Post } from '@/lib/mock-data'
+import { FadeImage } from '@/components/shared/fade-image'
 
 /**
  * Thumbnail for a post inside a grid (explore / profile). Renders the first image
@@ -22,5 +23,6 @@ export function GridMedia({ post, className }: { post: Post; className?: string 
     )
   }
 
-  return <img src={firstImage} alt="" className={cls} loading="lazy" decoding="async" />
+  // FadeImage fills its (relative) parent and paints a blur placeholder first.
+  return <FadeImage src={firstImage} alt="" className={className} />
 }

@@ -245,269 +245,10 @@ const GENERATED_FEED_REELS: Reel[] = GENERATED_REELS.map(({ username, ...r }, i)
 export const GENERATED_FEED_POSTS = GENERATED_FEED
 
 /* ── Posts ─────────────────────────────────────────────── */
-const MOCK_POSTS: Post[] = [
-  {
-    id: 'p1', author_id: 'u2', type: 'image',
-    images: ['https://picsum.photos/seed/post1/630/787'],
-    caption: 'Streets of Shinjuku at 2am 🌙 The city never truly sleeps #tokyo #streetphotography #nightlife',
-    location: 'Shinjuku, Tokyo', likes_count: 847, comments_count: 23, created_at: '2026-06-06T01:30:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p2', author_id: 'u3', type: 'carousel',
-    images: [
-      'https://picsum.photos/seed/post2a/630/787',
-      'https://picsum.photos/seed/post2b/630/787',
-      'https://picsum.photos/seed/post2c/630/787',
-    ],
-    caption: 'Golden hour in the mountains 🏔️ three frames, one perfect evening. Which one is your fav? #landscape #nature #goldenhour',
-    location: 'Dolomites, Italy', likes_count: 4210, comments_count: 89, created_at: '2026-06-05T18:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p3', author_id: 'u5', type: 'carousel',
-    images: [
-      'https://picsum.photos/seed/post3a/630/630',
-      'https://picsum.photos/seed/post3b/630/630',
-    ],
-    caption: 'Kyoto in spring 🌸 Every corner looks like a painting. This trip changed something in me. More photos in stories!',
-    location: 'Kyoto, Japan', likes_count: 12800, comments_count: 312, created_at: '2026-06-05T09:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p4', author_id: 'u4', type: 'image',
-    images: ['https://picsum.photos/seed/post4/630/787'],
-    caption: 'Above the clouds ☁️ 4,200m and worth every step #hiking #mountains #adventure',
-    location: 'Mont Blanc, France', likes_count: 2340, comments_count: 45, created_at: '2026-06-04T14:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p5', author_id: 'u7', type: 'image',
-    images: ['https://picsum.photos/seed/post5/630/630'],
-    caption: 'Homemade ramen from scratch 🍜 12-hour broth, fresh noodles, the works. Recipe on my blog (link in bio) #foodie #ramen #homecooking',
-    likes_count: 934, comments_count: 67, created_at: '2026-06-04T12:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p6', author_id: 'u6', type: 'image',
-    images: ['https://picsum.photos/seed/post6/630/787'],
-    caption: 'New project dropping soon 👁️ #fashion #editorial #photography',
-    location: 'New York City', likes_count: 521, comments_count: 18, created_at: '2026-06-03T20:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p7', author_id: 'u9', type: 'carousel',
-    images: [
-      'https://picsum.photos/seed/post7a/630/630',
-      'https://picsum.photos/seed/post7b/630/630',
-      'https://picsum.photos/seed/post7c/630/630',
-      'https://picsum.photos/seed/post7d/630/630',
-    ],
-    caption: 'New illustration series: "Urban Ghosts" 👻 swipe to see all 4 panels. Each piece takes about 3 days to finish. #illustration #art #digitalart',
-    likes_count: 1870, comments_count: 93, created_at: '2026-06-03T15:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p8', author_id: 'u11', type: 'image',
-    images: ['https://picsum.photos/seed/post8/630/787'],
-    caption: 'Minimal living. Maximal feeling. 🤍 New project for a client in Mitte #interiordesign #architecture #berlin',
-    location: 'Berlin, Germany', likes_count: 3421, comments_count: 54, created_at: '2026-06-02T16:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p9', author_id: 'u10', type: 'image',
-    images: ['https://picsum.photos/seed/post9/630/787'],
-    caption: 'Dawn patrol 🌅 empty waves, clear mind #surf #california #earlymorning',
-    location: 'Malibu, CA', likes_count: 789, comments_count: 31, created_at: '2026-06-01T07:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p10', author_id: 'u12', type: 'image',
-    images: ['https://picsum.photos/seed/post10/630/630'],
-    caption: 'Soundcheck in Prague 🎸 third night of the tour. The crowd here is unreal #tour #music #live',
-    location: 'Prague, Czech Republic', likes_count: 4100, comments_count: 187, created_at: '2026-05-31T21:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p11', author_id: 'u2', type: 'image',
-    images: ['https://picsum.photos/seed/post11/630/787'],
-    caption: 'Rainy Tuesday. Film. ☔ #35mm #filmphotography #tokyo #rain',
-    likes_count: 1230, comments_count: 28, created_at: '2026-05-30T14:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p12', author_id: 'u3', type: 'image',
-    images: ['https://picsum.photos/seed/post12/630/787'],
-    caption: 'The light at 6am is something else 🌄 #sunrise #landscape #photography',
-    likes_count: 6700, comments_count: 142, created_at: '2026-05-29T06:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  // Alice's own posts (for her profile grid)
-  {
-    id: 'p13', author_id: 'u1', type: 'image',
-    images: ['https://picsum.photos/seed/alice1/630/787'],
-    caption: 'Some days you just wander 🚶‍♀️ #street #urban #photography',
-    location: 'Barcelona', likes_count: 341, comments_count: 14, created_at: '2026-06-05T11:00:00Z',
-    aspect_ratio: '4:5', is_pinned: true,
-  },
-  {
-    id: 'p14', author_id: 'u1', type: 'carousel',
-    images: ['https://picsum.photos/seed/alice2/630/787', 'https://picsum.photos/seed/alice3/630/787'],
-    caption: 'Weekend getaway 🏖️ needed this more than I knew',
-    location: 'Sitges, Spain', likes_count: 528, comments_count: 21, created_at: '2026-05-28T10:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p15', author_id: 'u1', type: 'image',
-    images: ['https://picsum.photos/seed/alice4/630/630'],
-    caption: 'Golden light ☀️',
-    likes_count: 203, comments_count: 8, created_at: '2026-05-20T17:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p16', author_id: 'u1', type: 'image',
-    images: ['https://picsum.photos/seed/alice5/630/787'],
-    caption: 'New lens, new perspective 📸 #photography #portrait',
-    likes_count: 445, comments_count: 19, created_at: '2026-05-15T14:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p17', author_id: 'u1', type: 'image',
-    images: ['https://picsum.photos/seed/alice6/630/787'],
-    caption: 'Quiet mornings are my favourite kind ☕',
-    likes_count: 312, comments_count: 11, created_at: '2026-05-10T09:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p18', author_id: 'u1', type: 'image',
-    images: ['https://picsum.photos/seed/alice7/630/630'],
-    caption: 'Abstract 001 📷',
-    likes_count: 198, comments_count: 5, created_at: '2026-05-05T16:00:00Z',
-    aspect_ratio: '1:1',
-  },
-  {
-    id: 'p19', author_id: 'u4', type: 'image',
-    images: ['https://picsum.photos/seed/post19/630/787'],
-    caption: 'Crater lake at sunset 🌋 words can\'t do it justice #adventure #landscape',
-    location: 'Crater Lake, Oregon', likes_count: 1893, comments_count: 42, created_at: '2026-05-28T19:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  {
-    id: 'p20', author_id: 'u5', type: 'image',
-    images: ['https://picsum.photos/seed/post20/630/787'],
-    caption: 'Budapest at dusk 🌆 one of the most underrated cities in Europe #travel #europe',
-    location: 'Budapest, Hungary', likes_count: 8900, comments_count: 201, created_at: '2026-05-27T20:00:00Z',
-    aspect_ratio: '4:5',
-  },
-  // ── Video / Reel feed posts ───────────────────────────────────────────────
-  {
-    id: 'pv1', author_id: 'u3', type: 'reel',
-    images: ['https://picsum.photos/seed/reel1/420/745'],
-    video_url: '/reels/reel1.mp4',
-    caption: 'Mountain sunrise timelapse 🌄 Pure magic at 4am. #nature #landscape #timelapse',
-    location: 'Dolomites, Italy',
-    likes_count: 14200, comments_count: 234, plays_count: 89000,
-    created_at: '2026-06-06T08:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv2', author_id: 'u5', type: 'reel',
-    images: ['https://picsum.photos/seed/reel2/420/745'],
-    video_url: '/reels/reel2.mp4',
-    caption: 'Streets of Lisbon 🇵🇹 Hidden gems only locals know about #travel #europe #streetphotography',
-    location: 'Lisbon, Portugal',
-    likes_count: 28900, comments_count: 512, plays_count: 210000,
-    created_at: '2026-06-05T15:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv3', author_id: 'u7', type: 'reel',
-    images: ['https://picsum.photos/seed/reel3/420/745'],
-    video_url: '/reels/reel3.mp4',
-    caption: 'Flower close-up 🌸 Shot on iPhone — nature is the best studio. #macro #flowers #photography',
-    likes_count: 9300, comments_count: 187, plays_count: 45000,
-    created_at: '2026-06-04T11:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv4', author_id: 'u12', type: 'reel',
-    images: ['https://picsum.photos/seed/reel4/420/745'],
-    video_url: '/reels/reel4.mp4',
-    caption: 'City rush hour 🚌 Every commuter has a story #citylife #urban #documentary',
-    location: 'New York City',
-    likes_count: 31000, comments_count: 890, plays_count: 145000,
-    created_at: '2026-06-03T22:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv5', author_id: 'u4', type: 'reel',
-    images: ['https://picsum.photos/seed/reel5/420/745'],
-    video_url: '/reels/reel5.mp4',
-    caption: 'Traffic in the rain 🌧️ Melancholic vibes #rainy #moody #cityscape',
-    location: 'Seoul, Korea',
-    likes_count: 7600, comments_count: 143, plays_count: 52000,
-    created_at: '2026-06-02T16:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv6', author_id: 'u10', type: 'reel',
-    images: ['https://picsum.photos/seed/reel6/420/745'],
-    video_url: '/reels/reel6.mp4',
-    caption: 'Just a chill morning ☕ slow life is the good life #slowliving #morning #vibes',
-    likes_count: 4200, comments_count: 98, plays_count: 31000,
-    created_at: '2026-06-01T09:00:00Z', aspect_ratio: '4:5',
-  },
-  // More in-feed video posts (source clips reused) — authored by followed users
-  {
-    id: 'pv7', author_id: 'u2', type: 'reel', images: ['https://picsum.photos/seed/reel7/420/745'],
-    video_url: '/reels/reel1.mp4', caption: 'Rainy crossing 🚦 #tokyo #moody #reels',
-    location: 'Shibuya, Tokyo', likes_count: 12300, comments_count: 198, plays_count: 81000,
-    created_at: '2026-05-31T20:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv8', author_id: 'u3', type: 'reel', images: ['https://picsum.photos/seed/reel8/420/745'],
-    video_url: '/reels/reel2.mp4', caption: 'Glacier melt up close ❄️ #nature #landscape',
-    location: 'Dolomites, Italy', likes_count: 9600, comments_count: 134, plays_count: 64000,
-    created_at: '2026-05-31T10:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv9', author_id: 'u5', type: 'reel', images: ['https://picsum.photos/seed/reel9/420/745'],
-    video_url: '/reels/reel3.mp4', caption: 'Best pastéis de nata in Lisbon 🥮 #foodie #travel',
-    location: 'Lisbon, Portugal', likes_count: 20100, comments_count: 372, plays_count: 142000,
-    created_at: '2026-05-30T18:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv10', author_id: 'u7', type: 'reel', images: ['https://picsum.photos/seed/reel10/420/745'],
-    video_url: '/reels/reel4.mp4', caption: 'Knife skills 101 🔪 #cooking #recipe',
-    likes_count: 11800, comments_count: 221, plays_count: 79000,
-    created_at: '2026-05-30T07:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv11', author_id: 'u4', type: 'reel', images: ['https://picsum.photos/seed/reel11/420/745'],
-    video_url: '/reels/reel5.mp4', caption: 'Summit push at dawn ⛰️ #hiking #adventure',
-    location: 'Mont Blanc, France', likes_count: 8200, comments_count: 147, plays_count: 57000,
-    created_at: '2026-05-29T16:00:00Z', aspect_ratio: '4:5',
-  },
-  {
-    id: 'pv12', author_id: 'u6', type: 'reel', images: ['https://picsum.photos/seed/reel13/420/745'],
-    video_url: '/reels/reel6.mp4', caption: 'Set design reveal 🎬 #fashion #editorial',
-    location: 'New York City', likes_count: 5900, comments_count: 79, plays_count: 36000,
-    created_at: '2026-05-28T19:00:00Z', aspect_ratio: '4:5',
-  },
-]
 
-/* ── Excluded content ──────────────────────────────────────
- * Nature / landscape / outdoors demo posts + reels, removed site-wide by
- * request. Filtering here (rather than deleting inline) guarantees they never
- * surface on ANY surface — feed, explore, reels, profile grids or the modal —
- * since every screen reads from POSTS / REELS below. */
-const EXCLUDED_POST_IDS = new Set([
-  'p2', 'p4', 'p9', 'p12', 'p19',          // mountain / hiking / surf / sunrise / crater-lake photos
-  'pv1', 'pv3', 'pv8', 'pv11',             // mountain / flower / glacier / summit videos
-])
-const EXCLUDED_REEL_IDS = new Set([
-  'r1', 'r5', 'r6', 'r8', 'r11', 'r17',    // mountain / summit / surf / alpine / ridge / fog reels
-])
 
-/** All posts: real generated content first, demo posts behind it. */
-export const POSTS: Post[] = [...GENERATED_FEED, ...MOCK_POSTS].filter(
-  p => !EXCLUDED_POST_IDS.has(p.id)
-)
+/** Every post comes from `videos_phots/` (generated-media) — no demo filler. */
+export const POSTS: Post[] = [...GENERATED_FEED]
 
 export const getPostsByUser = (userId: string) => POSTS.filter(p => p.author_id === userId)
 export const getFeedPosts = (followingIds: string[]) =>
@@ -517,14 +258,14 @@ export const getFeedPosts = (followingIds: string[]) =>
 
 /* ── Comments ──────────────────────────────────────────── */
 export const COMMENTS: Comment[] = [
-  { id: 'c1', post_id: 'p1', author_id: 'u1', text: 'This shot is incredible 😍', likes_count: 12, created_at: '2026-06-06T02:00:00Z' },
-  { id: 'c2', post_id: 'p1', author_id: 'u4', text: 'The atmosphere in this photo is unreal', likes_count: 8, created_at: '2026-06-06T02:30:00Z' },
-  { id: 'c3', post_id: 'p1', author_id: 'u9', text: '🔥🔥🔥', likes_count: 3, created_at: '2026-06-06T03:00:00Z' },
-  { id: 'c4', post_id: 'p2', author_id: 'u1', text: 'Middle one for sure! The light is perfect', likes_count: 22, created_at: '2026-06-05T19:00:00Z' },
-  { id: 'c5', post_id: 'p2', author_id: 'u5', text: 'Absolutely breathtaking series 🏔️', likes_count: 15, created_at: '2026-06-05T19:30:00Z' },
-  { id: 'c6', post_id: 'p3', author_id: 'u3', text: 'I still dream about this trip', likes_count: 45, created_at: '2026-06-05T10:00:00Z' },
-  { id: 'c7', post_id: 'p5', author_id: 'u2', text: 'Can you please just come cook for me 🙏', likes_count: 31, created_at: '2026-06-04T13:00:00Z' },
-  { id: 'c8', post_id: 'p7', author_id: 'u6', text: 'The detail in panel 3 is insane! How long did that take?', likes_count: 18, created_at: '2026-06-03T16:00:00Z' },
+  { id: 'c1', post_id: 'gen-post-0', author_id: 'u1', text: 'This shot is incredible 😍', likes_count: 12, created_at: '2026-06-06T02:00:00Z' },
+  { id: 'c2', post_id: 'gen-post-0', author_id: 'u4', text: 'The atmosphere in this photo is unreal', likes_count: 8, created_at: '2026-06-06T02:30:00Z' },
+  { id: 'c3', post_id: 'gen-post-0', author_id: 'u9', text: '🔥🔥🔥', likes_count: 3, created_at: '2026-06-06T03:00:00Z' },
+  { id: 'c4', post_id: 'gen-post-0', author_id: 'u1', text: 'Middle one for sure! The light is perfect', likes_count: 22, created_at: '2026-06-05T19:00:00Z' },
+  { id: 'c5', post_id: 'gen-post-0', author_id: 'u5', text: 'Absolutely breathtaking series 🏔️', likes_count: 15, created_at: '2026-06-05T19:30:00Z' },
+  { id: 'c6', post_id: 'gen-post-26', author_id: 'u3', text: 'I still dream about this trip', likes_count: 45, created_at: '2026-06-05T10:00:00Z' },
+  { id: 'c7', post_id: 'gen-post-3', author_id: 'u2', text: 'Can you please just come cook for me 🙏', likes_count: 31, created_at: '2026-06-04T13:00:00Z' },
+  { id: 'c8', post_id: 'gen-post-4', author_id: 'u6', text: 'The detail in panel 3 is insane! How long did that take?', likes_count: 18, created_at: '2026-06-03T16:00:00Z' },
 ]
 
 export const getCommentsByPost = (postId: string) => COMMENTS.filter(c => c.post_id === postId)
@@ -565,122 +306,10 @@ export const getStoryAuthors = () => {
 }
 
 /* ── Reels ─────────────────────────────────────────────── */
-const MOCK_REELS: Reel[] = [
-  {
-    id: 'r1', author_id: 'u3',
-    video_url: '/reels/reel1.mp4',
-    poster_url: 'https://picsum.photos/seed/reel1/420/745',
-    caption: 'Mountain sunrise timelapse 🌄 #nature #landscape #timelapse',
-    audio: 'Original audio · carla_photos',
-    likes_count: 14200, comments_count: 234, plays_count: 89000, created_at: '2026-06-06T08:00:00Z',
-  },
-  {
-    id: 'r2', author_id: 'u5',
-    video_url: '/reels/reel2.mp4',
-    poster_url: 'https://picsum.photos/seed/reel2/420/745',
-    caption: 'Streets of Lisbon 🇵🇹 Hidden gems only locals know #travel #europe',
-    audio: 'Bossa Nova Vibes · Various Artists',
-    likes_count: 28900, comments_count: 512, plays_count: 210000, created_at: '2026-06-05T15:00:00Z',
-  },
-  {
-    id: 'r3', author_id: 'u7',
-    video_url: '/reels/reel3.mp4',
-    poster_url: 'https://picsum.photos/seed/reel3/420/745',
-    caption: 'Making handmade dumplings from scratch 🥟 Full recipe in bio!',
-    audio: 'Cooking Beats · Lofi Records',
-    likes_count: 9300, comments_count: 187, plays_count: 45000, created_at: '2026-06-04T11:00:00Z',
-  },
-  {
-    id: 'r4', author_id: 'u12',
-    video_url: '/reels/reel4.mp4',
-    poster_url: 'https://picsum.photos/seed/reel4/420/745',
-    caption: 'Live session from last night 🎸 The crowd was incredible',
-    audio: 'Live recording · liam_music',
-    likes_count: 31000, comments_count: 890, plays_count: 145000, created_at: '2026-06-03T22:00:00Z',
-  },
-  {
-    id: 'r5', author_id: 'u4',
-    video_url: '/reels/reel5.mp4',
-    poster_url: 'https://picsum.photos/seed/reel5/420/745',
-    caption: 'Solo summit attempt ⛰️ 14 hours, zero regrets',
-    audio: 'Epic Motivation · Study Beats',
-    likes_count: 7600, comments_count: 143, plays_count: 52000, created_at: '2026-06-02T16:00:00Z',
-  },
-  {
-    id: 'r6', author_id: 'u10',
-    video_url: '/reels/reel6.mp4',
-    poster_url: 'https://picsum.photos/seed/reel6/420/745',
-    caption: 'Perfect barrel in Malibu 🌊 My best wave of 2026',
-    audio: 'Surf Vibes · Ocean Sounds',
-    likes_count: 4200, comments_count: 98, plays_count: 31000, created_at: '2026-06-01T09:00:00Z',
-  },
-  // ── More shorts (the 6 source clips reused with varied metadata) ────────────
-  {
-    id: 'r7', author_id: 'u2', video_url: '/reels/reel1.mp4', poster_url: 'https://picsum.photos/seed/reel7/420/745',
-    caption: 'Neon nights in Shibuya 🌃 #tokyo #nightlife', audio: 'Synthwave · Retro Beats',
-    likes_count: 18700, comments_count: 301, plays_count: 120000, created_at: '2026-05-31T22:00:00Z',
-  },
-  {
-    id: 'r8', author_id: 'u3', video_url: '/reels/reel2.mp4', poster_url: 'https://picsum.photos/seed/reel8/420/745',
-    caption: 'Alpine lake reflections 🏔️ #nature #reels', audio: 'Ambient · Calm Waves',
-    likes_count: 9900, comments_count: 142, plays_count: 67000, created_at: '2026-05-31T12:00:00Z',
-  },
-  {
-    id: 'r9', author_id: 'u5', video_url: '/reels/reel3.mp4', poster_url: 'https://picsum.photos/seed/reel9/420/745',
-    caption: 'Street food tour 🍢 part 2! #foodie #travel', audio: 'Lofi · Chill Hop',
-    likes_count: 22400, comments_count: 410, plays_count: 156000, created_at: '2026-05-30T19:00:00Z',
-  },
-  {
-    id: 'r10', author_id: 'u7', video_url: '/reels/reel4.mp4', poster_url: 'https://picsum.photos/seed/reel10/420/745',
-    caption: 'Plating like a pro 🍽️ #cooking #recipe', audio: 'Kitchen Groove · Various',
-    likes_count: 13100, comments_count: 233, plays_count: 88000, created_at: '2026-05-30T08:00:00Z',
-  },
-  {
-    id: 'r11', author_id: 'u4', video_url: '/reels/reel5.mp4', poster_url: 'https://picsum.photos/seed/reel11/420/745',
-    caption: 'Ridge line at golden hour ⛰️ #hiking #adventure', audio: 'Epic · Cinematic',
-    likes_count: 8700, comments_count: 159, plays_count: 61000, created_at: '2026-05-29T17:00:00Z',
-  },
-  {
-    id: 'r12', author_id: 'u12', video_url: '/reels/reel6.mp4', poster_url: 'https://picsum.photos/seed/reel12/420/745',
-    caption: 'Backstage before the show 🎸 #tour #music', audio: 'Live recording · liam_music',
-    likes_count: 26800, comments_count: 540, plays_count: 178000, created_at: '2026-05-29T06:00:00Z',
-  },
-  {
-    id: 'r13', author_id: 'u6', video_url: '/reels/reel1.mp4', poster_url: 'https://picsum.photos/seed/reel13/420/745',
-    caption: 'Editorial BTS 📸 #fashion #photography', audio: 'Runway · Beat Lab',
-    likes_count: 6400, comments_count: 88, plays_count: 39000, created_at: '2026-05-28T20:00:00Z',
-  },
-  {
-    id: 'r14', author_id: 'u9', video_url: '/reels/reel2.mp4', poster_url: 'https://picsum.photos/seed/reel14/420/745',
-    caption: 'Speed-paint timelapse 🎨 #art #illustration', audio: 'Focus · Study Beats',
-    likes_count: 11200, comments_count: 207, plays_count: 74000, created_at: '2026-05-28T11:00:00Z',
-  },
-  {
-    id: 'r15', author_id: 'u11', video_url: '/reels/reel3.mp4', poster_url: 'https://picsum.photos/seed/reel15/420/745',
-    caption: 'Apartment tour — Berlin loft 🏠 #interiordesign', audio: 'House Tour · Lo-Fi',
-    likes_count: 15600, comments_count: 276, plays_count: 99000, created_at: '2026-05-27T15:00:00Z',
-  },
-  {
-    id: 'r16', author_id: 'u10', video_url: '/reels/reel4.mp4', poster_url: 'https://picsum.photos/seed/reel16/420/745',
-    caption: 'Sunset skate session 🛹 #skate #california', audio: 'Punk · Garage',
-    likes_count: 7300, comments_count: 121, plays_count: 48000, created_at: '2026-05-27T02:00:00Z',
-  },
-  {
-    id: 'r17', author_id: 'u3', video_url: '/reels/reel5.mp4', poster_url: 'https://picsum.photos/seed/reel17/420/745',
-    caption: 'Fog rolling over the peaks 🌫️ #landscape', audio: 'Drone · Ambient',
-    likes_count: 19800, comments_count: 312, plays_count: 134000, created_at: '2026-05-26T18:00:00Z',
-  },
-  {
-    id: 'r18', author_id: 'u5', video_url: '/reels/reel6.mp4', poster_url: 'https://picsum.photos/seed/reel18/420/745',
-    caption: 'Tram rides through Lisbon 🚋 #travel #europe', audio: 'Fado · Acoustic',
-    likes_count: 24100, comments_count: 489, plays_count: 167000, created_at: '2026-05-26T09:00:00Z',
-  },
-]
+
 
 /** All reels: real generated reels first, demo reels behind them. */
-export const REELS: Reel[] = [...GENERATED_FEED_REELS, ...MOCK_REELS].filter(
-  r => !EXCLUDED_REEL_IDS.has(r.id)
-)
+export const REELS: Reel[] = [...GENERATED_FEED_REELS]
 
 /* ── DM Threads ────────────────────────────────────────── */
 export const DM_THREADS: DmThread[] = [
@@ -725,16 +354,16 @@ export const getDmThread = (id: string) => DM_THREADS.find(t => t.id === id)
 
 /* ── Notifications ─────────────────────────────────────── */
 export const NOTIFICATIONS: Notification[] = [
-  { id: 'n1', type: 'like', actor_id: 'u3', post_id: 'p13', text: 'liked your photo.', created_at: '2026-06-06T11:00:00Z', read: false },
-  { id: 'n2', type: 'comment', actor_id: 'u2', post_id: 'p13', text: 'commented: "Stunning as always 🔥"', created_at: '2026-06-06T10:30:00Z', read: false },
+  { id: 'n1', type: 'like', actor_id: 'u3', post_id: 'gen-post-0', text: 'liked your photo.', created_at: '2026-06-06T11:00:00Z', read: false },
+  { id: 'n2', type: 'comment', actor_id: 'u2', post_id: 'gen-post-0', text: 'commented: "Stunning as always 🔥"', created_at: '2026-06-06T10:30:00Z', read: false },
   { id: 'n3', type: 'follow', actor_id: 'u4', text: 'started following you.', created_at: '2026-06-06T09:00:00Z', read: false },
-  { id: 'n4', type: 'like', actor_id: 'u5', post_id: 'p14', text: 'liked your photo.', created_at: '2026-06-05T20:00:00Z', read: true },
-  { id: 'n5', type: 'comment', actor_id: 'u7', post_id: 'p14', text: 'commented: "I need to go to Sitges 😍"', created_at: '2026-06-05T18:00:00Z', read: true },
+  { id: 'n4', type: 'like', actor_id: 'u5', post_id: 'gen-post-26', text: 'liked your photo.', created_at: '2026-06-05T20:00:00Z', read: true },
+  { id: 'n5', type: 'comment', actor_id: 'u7', post_id: 'gen-post-26', text: 'commented: "I need to go to Sitges 😍"', created_at: '2026-06-05T18:00:00Z', read: true },
   { id: 'n6', type: 'follow', actor_id: 'u9', text: 'started following you.', created_at: '2026-06-05T15:00:00Z', read: true },
-  { id: 'n7', type: 'like', actor_id: 'u10', post_id: 'p15', text: 'liked your photo.', created_at: '2026-06-04T12:00:00Z', read: true },
-  { id: 'n8', type: 'mention', actor_id: 'u2', post_id: 'p11', text: 'mentioned you in a comment.', created_at: '2026-06-03T16:00:00Z', read: true },
+  { id: 'n7', type: 'like', actor_id: 'u10', post_id: 'gen-post-0', text: 'liked your photo.', created_at: '2026-06-04T12:00:00Z', read: true },
+  { id: 'n8', type: 'mention', actor_id: 'u2', post_id: 'gen-post-26', text: 'mentioned you in a comment.', created_at: '2026-06-03T16:00:00Z', read: true },
   { id: 'n9', type: 'follow', actor_id: 'u6', text: 'started following you.', created_at: '2026-06-02T10:00:00Z', read: true },
-  { id: 'n10', type: 'like', actor_id: 'u12', post_id: 'p16', text: 'liked your photo.', created_at: '2026-06-01T20:00:00Z', read: true },
+  { id: 'n10', type: 'like', actor_id: 'u12', post_id: 'gen-post-26', text: 'liked your photo.', created_at: '2026-06-01T20:00:00Z', read: true },
 ]
 
 /* ── Notes ─────────────────────────────────────────────── */
@@ -770,5 +399,5 @@ export function formatCount(n: number): string {
 
 // Default follows: alice follows u2-u7
 export const DEFAULT_FOLLOWING = ['u2', 'u3', 'u4', 'u5', 'u6', 'u7']
-export const DEFAULT_LIKED_POSTS: string[] = ['p3', 'p5']
-export const DEFAULT_SAVED_POSTS: string[] = ['p2', 'p8']
+export const DEFAULT_LIKED_POSTS: string[] = ['gen-post-3', 'gen-post-4']
+export const DEFAULT_SAVED_POSTS: string[] = ['gen-post-0', 'gen-post-6']

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { MEDIA_BLUR } from '@/lib/generated-media'
 
 /**
  * Image that reserves its box (parent supplies the aspect-ratio), shows a shimmer
@@ -33,6 +34,7 @@ export function FadeImage({
 }) {
   const [loaded, setLoaded] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
+  const blur = MEDIA_BLUR[src]
 
   // If the image is already in the browser cache it can be `complete` before
   // React attaches onLoad — surface that synchronously so we never get stuck
@@ -48,7 +50,19 @@ export function FadeImage({
 
   return (
     <>
-      {!loaded && <div className="absolute inset-0 media-shimmer" aria-hidden />}
+      {!loaded && (
+        blur ? (
+          // Instant low-res preview (LQIP): scaled up + blurred so the box is
+          // never blank, then the real image cross-fades in over it.
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-110 blur-xl"
+            style={{ backgroundImage: `url("${blur}")` }}
+            aria-hidden
+          />
+        ) : (
+          <div className="absolute inset-0 media-shimmer" aria-hidden />
+        )
+      )}
       <img
         ref={imgRef}
         src={src}

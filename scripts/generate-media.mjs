@@ -41,6 +41,10 @@ const OUT_FILE = path.join(ROOT, 'src', 'lib', 'generated-media.ts')
 const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']
 const VIDEO_EXTS = ['.mp4', '.webm', '.mov', '.m4v', '.ogv']
 
+// Fixed clock anchor so the generated file is byte-stable across rebuilds (no
+// git churn from `Date.now()`); posts are still spaced an hour apart.
+const BASE_TIME = Date.parse('2026-06-17T12:00:00.000Z')
+
 const extOf = (f) => path.extname(f).toLowerCase()
 const isImage = (f) => IMAGE_EXTS.includes(extOf(f))
 const isVideo = (f) => VIDEO_EXTS.includes(extOf(f))
@@ -164,6 +168,15 @@ async function main() {
   const sidecar = await loadSidecar()
   await fs.mkdir(DEST_DIR, { recursive: true })
 
+  // Optional: tiny blurred placeholders (LQIP) embedded as data URLs so feed /
+  // grid images paint an instant low-res preview that sharpens in, instead of a
+  // blank box. Sharp ships with Next, so this normally runs; if it's somehow
+  // missing we just skip blur and the UI falls back to the shimmer skeleton.
+  let sharp = null
+  try { sharp = (await import('sharp')).default } catch { /* no sharp — skip blur */ }
+  /** @type {Record<string, string>} */
+  const blurMap = {}
+
   /** @type {Map<string, { kind: 'image'|'video', groupBase: string, items: {num:number, srcName:string, destName:string, url:string}[] }>} */
   const groups = new Map()
 
@@ -180,6 +193,17 @@ async function main() {
     const url = `/media/feed/${destName}`
 
     await ensureCopied(srcName, destName)
+
+    if (sharp && kind === 'image') {
+      try {
+        const buf = await sharp(path.join(SRC_DIR, srcName))
+          .rotate()                              // honour EXIF orientation
+          .resize(24, 24, { fit: 'inside' })     // ~24px longest edge
+          .webp({ quality: 40 })
+          .toBuffer()
+        blurMap[url] = `data:image/webp;base64,${buf.toString('base64')}`
+      } catch { /* skip this one — falls back to shimmer */ }
+    }
 
     if (!groups.has(key)) groups.set(key, { kind, groupBase, items: [] })
     groups.get(key).items.push({ num, srcName, destName, url })
@@ -205,7 +229,7 @@ async function main() {
     const caption = typeof ov.caption === 'string' ? ov.caption : cleanCaption(g.groupBase)
     const username = typeof ov.username === 'string' ? ov.username : undefined
     const likes = Number.isFinite(ov.likes) ? Number(ov.likes) : 120 + (seed % 9000)
-    const createdAt = new Date(Date.now() - idx * 3_600_000).toISOString()
+    const createdAt = new Date(BASE_TIME - idx * 3_600_000).toISOString()
 
     if (g.kind === 'image') {
       const images = g.items.map((it) => it.url)
@@ -270,7 +294,9 @@ async function main() {
     `export const GENERATED_AVAILABLE = ${posts.length > 0 || reels.length > 0}\n\n` +
     `export const GENERATED_POSTS: GenPost[] = ${JSON.stringify(posts, null, 2)}\n\n` +
     `export const GENERATED_REELS: GenReel[] = ${JSON.stringify(reels, null, 2)}\n\n` +
-    `export const MEDIA_IMAGES: string[] = ${JSON.stringify(imagePool, null, 2)}\n`
+    `export const MEDIA_IMAGES: string[] = ${JSON.stringify(imagePool, null, 2)}\n\n` +
+    '/** Tiny blurred data-URL placeholder per image url (LQIP). */\n' +
+    `export const MEDIA_BLUR: Record<string, string> = ${JSON.stringify(blurMap, null, 2)}\n`
 
   await fs.mkdir(path.dirname(OUT_FILE), { recursive: true })
   await fs.writeFile(OUT_FILE, body, 'utf8')

@@ -5,6 +5,7 @@ import { Volume2, VolumeX, MoreHorizontal, Music2, ChevronUp, ChevronDown } from
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { REELS, getUserById, formatCount, type Reel } from '@/lib/mock-data'
+import { MEDIA_IMAGES } from '@/lib/generated-media'
 import { useStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
 import { MEDIA } from '@/lib/media-config'
@@ -216,7 +217,7 @@ function ReelItem({
     id: reel.author_id,
     username: 'user',
     full_name: 'User',
-    avatar_url: `https://picsum.photos/seed/${reel.author_id}/100/100`,
+    avatar_url: MEDIA_IMAGES[0] ?? '',
     is_verified: false,
   }
   const { isFollowing, follow } = useStore()
