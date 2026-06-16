@@ -491,8 +491,23 @@ const MOCK_POSTS: Post[] = [
   },
 ]
 
+/* ── Excluded content ──────────────────────────────────────
+ * Nature / landscape / outdoors demo posts + reels, removed site-wide by
+ * request. Filtering here (rather than deleting inline) guarantees they never
+ * surface on ANY surface — feed, explore, reels, profile grids or the modal —
+ * since every screen reads from POSTS / REELS below. */
+const EXCLUDED_POST_IDS = new Set([
+  'p2', 'p4', 'p9', 'p12', 'p19',          // mountain / hiking / surf / sunrise / crater-lake photos
+  'pv1', 'pv3', 'pv8', 'pv11',             // mountain / flower / glacier / summit videos
+])
+const EXCLUDED_REEL_IDS = new Set([
+  'r1', 'r5', 'r6', 'r8', 'r11', 'r17',    // mountain / summit / surf / alpine / ridge / fog reels
+])
+
 /** All posts: real generated content first, demo posts behind it. */
-export const POSTS: Post[] = [...GENERATED_FEED, ...MOCK_POSTS]
+export const POSTS: Post[] = [...GENERATED_FEED, ...MOCK_POSTS].filter(
+  p => !EXCLUDED_POST_IDS.has(p.id)
+)
 
 export const getPostsByUser = (userId: string) => POSTS.filter(p => p.author_id === userId)
 export const getFeedPosts = (followingIds: string[]) =>
@@ -663,7 +678,9 @@ const MOCK_REELS: Reel[] = [
 ]
 
 /** All reels: real generated reels first, demo reels behind them. */
-export const REELS: Reel[] = [...GENERATED_FEED_REELS, ...MOCK_REELS]
+export const REELS: Reel[] = [...GENERATED_FEED_REELS, ...MOCK_REELS].filter(
+  r => !EXCLUDED_REEL_IDS.has(r.id)
+)
 
 /* ── DM Threads ────────────────────────────────────────── */
 export const DM_THREADS: DmThread[] = [

@@ -14,6 +14,26 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: projectRoot,
   },
+  // Cache all locally-served media aggressively. The feed/explore repeat the
+  // same clips as you scroll (cycles) and on revisits — with an immutable
+  // year-long cache every repeat is served from disk/memory with zero network,
+  // so scrolling back or auto-advancing never re-downloads a byte.
+  async headers() {
+    return [
+      {
+        source: "/media/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/reels/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

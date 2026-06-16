@@ -13,6 +13,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Warm up the TLS/DNS handshake to the remote placeholder hosts so the
+            few demo images that still use them paint sooner. Local media is
+            served same-origin and needs no hint. */}
+        <link rel="preconnect" href="https://picsum.photos" crossOrigin="" />
+        <link rel="preconnect" href="https://i.pravatar.cc" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://picsum.photos" />
+      </head>
       <body className="min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
